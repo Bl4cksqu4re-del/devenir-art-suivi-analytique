@@ -1,0 +1,1017 @@
+{
+  "annee": 2026,
+  "Fonctionnement": [
+    {
+      "poste": "60 – Achats",
+      "categorie": "Fournitures non stockables",
+      "prevu": 50.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "carburant",
+      "prevu": 200.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "Fournitures bureau",
+      "prevu": 1500.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "copies",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "Petit équipement",
+      "prevu": 150.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Locations mobilières & immobilières",
+      "prevu": 3740.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Assurances",
+      "prevu": 1350.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Entretien réparations",
+      "prevu": 250.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Sous-traitance",
+      "prevu": 50.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Documentation",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Indemnités participant·es commissions",
+      "prevu": 250.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Comptabilité, social, commissaire aux comptes",
+      "prevu": 9000.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Hébergement web, maintenance…",
+      "prevu": 480.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Diffusion outils de com",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Rémunération Intermédiaires & honoraires",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais de communication",
+      "prevu": 200.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais postaux",
+      "prevu": 75.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais téléphone",
+      "prevu": 1608.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Publicité, publications, impressions com",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Salarié·es abonnement",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Salarié·es déplacements",
+      "prevu": 200.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Membres CA déplacements",
+      "prevu": 200.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Intervenant·es",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Participant·es indemnisé·s",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais de réception et de mission",
+      "prevu": 415.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Mission hébergement intervenants",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Services bancaires",
+      "prevu": 250.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Cotisations",
+      "prevu": 1220.0
+    },
+    {
+      "poste": "63 – Impôts & taxes",
+      "categorie": "Impôts & taxes sur rémunération",
+      "prevu": 40.0
+    },
+    {
+      "poste": "63 – Impôts & taxes",
+      "categorie": "Autres impôts & taxes",
+      "prevu": 0.0
+    },
+    {
+      "poste": "64 – Charges de personnel",
+      "categorie": "Chargée de communication et documentation",
+      "prevu": 26640.0
+    },
+    {
+      "poste": "64 – Charges de personnel",
+      "categorie": "Charges de personnel non cadre",
+      "prevu": 6000.0
+    },
+    {
+      "poste": "64 – Charges de personnel",
+      "categorie": "Coordinatrice",
+      "prevu": 34920.0
+    },
+    {
+      "poste": "64 – Charges de personnel",
+      "categorie": "Charges de personnel cadre",
+      "prevu": 14280.0
+    },
+    {
+      "poste": "64 – Charges de personnel",
+      "categorie": "Autres charges de personnel",
+      "prevu": 2200.0
+    },
+    {
+      "poste": "65 – Autres charges de gestion courante",
+      "categorie": "Droits d’auteur",
+      "prevu": 0.0
+    },
+    {
+      "poste": "65 – Autres charges de gestion courante",
+      "categorie": "Cotisation diffuseur",
+      "prevu": 0.0
+    }
+  ],
+  "Commissions": [
+    {
+      "poste": "60 – Achats",
+      "categorie": "Carburant",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "Fournitures bureau",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "copies",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "Petit équipement",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Sous-traitance",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Documentation",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Indemnités participant·es commissions",
+      "prevu": 5200.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais de communication",
+      "prevu": 550.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais postaux",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Publicité, publications, impressions com",
+      "prevu": 1050.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Salarié·es et membres CA",
+      "prevu": 50.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Intervenant·es",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Participant·es indemnisé·s",
+      "prevu": 400.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais de réception et de mission",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Mission hébergement intervenants",
+      "prevu": 0.0
+    },
+    {
+      "poste": "63 – Impôts & taxes",
+      "categorie": "Impôts & taxes sur rémunération",
+      "prevu": 0.0
+    },
+    {
+      "poste": "63 – Impôts & taxes",
+      "categorie": "Autres impôts & taxes",
+      "prevu": 0.0
+    },
+    {
+      "poste": "65 – Autres charges de gestion courante",
+      "categorie": "Droits d’auteur",
+      "prevu": 0.0
+    },
+    {
+      "poste": "65 – Autres charges de gestion courante",
+      "categorie": "Cotisation diffuseur",
+      "prevu": 0.0
+    }
+  ],
+  "Points Infos": [
+    {
+      "poste": "60 – Achats",
+      "categorie": "carburant",
+      "prevu": 120.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "Fournitures bureau",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "copies",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "Petit équipement",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Locations mobilières & immobilières",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Assurances",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Entretien réparations",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Sous-traitance",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Documentation",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Indemnités participant·es commissions",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Comptabilité, social, commissaire aux comptes",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Hébergement web, maintenance…",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Diffusion outils de com",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Rémunération Intermédiaires & honoraires",
+      "prevu": 400.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais de communication",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais postaux",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais téléphone",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Publicité, publications, impressions com",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Salarié·es et membres CA",
+      "prevu": 150.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Intervenant·es",
+      "prevu": 400.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Participant·es indemnisé·s",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais de réception et de mission",
+      "prevu": 150.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Mission hébergement intervenants",
+      "prevu": 0.0
+    },
+    {
+      "poste": "63 – Impôts & taxes",
+      "categorie": "Impôts & taxes sur rémunération",
+      "prevu": 0.0
+    },
+    {
+      "poste": "63 – Impôts & taxes",
+      "categorie": "Autres impôts & taxes",
+      "prevu": 0.0
+    },
+    {
+      "poste": "65 – Autres charges de gestion courante",
+      "categorie": "Droits d’auteur",
+      "prevu": 0.0
+    },
+    {
+      "poste": "65 – Autres charges de gestion courante",
+      "categorie": "Cotisation diffuseur",
+      "prevu": 0.0
+    }
+  ],
+  "RRAV": [
+    {
+      "poste": "60 – Achats",
+      "categorie": "Fournitures non stockables",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "carburant",
+      "prevu": 100.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "Fournitures bureau",
+      "prevu": 100.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "copies",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "Petit équipement",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Locations mobilières & immobilières",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Assurances",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Entretien réparations",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Sous-traitance",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Documentation",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Indemnités participant·es commissions",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Hébergement web, maintenance…",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Diffusion outils de com",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Rémunération Intermédiaires & honoraires",
+      "prevu": 1200.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais de communication",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais postaux",
+      "prevu": 200.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Publicité, publications, impressions com",
+      "prevu": 500.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Salarié·es et membres CA",
+      "prevu": 200.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Intervenant·es",
+      "prevu": 675.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Participant·es indemnisé·s",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais de réception et de mission",
+      "prevu": 3685.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Mission hébergement intervenants",
+      "prevu": 300.0
+    },
+    {
+      "poste": "63 – Impôts & taxes",
+      "categorie": "Impôts & taxes sur rémunération",
+      "prevu": 0.0
+    },
+    {
+      "poste": "63 – Impôts & taxes",
+      "categorie": "Autres impôts & taxes",
+      "prevu": 0.0
+    },
+    {
+      "poste": "65 – Autres charges de gestion courante",
+      "categorie": "Droits d’auteur",
+      "prevu": 1000.0
+    },
+    {
+      "poste": "65 – Autres charges de gestion courante",
+      "categorie": "Cotisation diffuseur",
+      "prevu": 11.0
+    }
+  ],
+  "Coopération et Visibilité": [
+    {
+      "poste": "60 – Achats",
+      "categorie": "Fournitures non stockables",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "carburant",
+      "prevu": 600.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "Fournitures bureau",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "copies",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "Petit équipement",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Locations mobilières & immobilières",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Assurances",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Entretien réparations",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Sous-traitance",
+      "prevu": 2600.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Documentation",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Indemnités participant·es commissions",
+      "prevu": 250.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Comptabilité, social, commissaire aux comptes",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Hébergement web, maintenance…",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Diffusion outils de com",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Rémunération Intermédiaires & honoraires",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais de communication",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais postaux",
+      "prevu": 20.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais téléphone",
+      "prevu": 234.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Publicité, publications, impressions com",
+      "prevu": 1100.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Salarié·es abonnement",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Salarié·es et membres du CA",
+      "prevu": 750.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Intervenant·es",
+      "prevu": 750.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Participant·es indemnisé·s",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais de réception et de mission – équipe",
+      "prevu": 400.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Mission hébergement - intervenants",
+      "prevu": 1130.0
+    },
+    {
+      "poste": "63 – Impôts & taxes",
+      "categorie": "Impôts & taxes sur rémunération",
+      "prevu": 0.0
+    },
+    {
+      "poste": "63 – Impôts & taxes",
+      "categorie": "Autres impôts & taxes",
+      "prevu": 0.0
+    },
+    {
+      "poste": "64 – Charges de personnel",
+      "categorie": "Chargé·e de coopération et visibilité",
+      "prevu": 26820.0
+    },
+    {
+      "poste": "64 – Charges de personnel",
+      "categorie": "Charges de personnel non cadre",
+      "prevu": 6000.0
+    },
+    {
+      "poste": "64 – Charges de personnel",
+      "categorie": "Autres charges de personnel",
+      "prevu": 0.0
+    },
+    {
+      "poste": "65 – Autres charges de gestion courante",
+      "categorie": "Droits d’auteur",
+      "prevu": 7052.0
+    },
+    {
+      "poste": "65 – Autres charges de gestion courante",
+      "categorie": "Cotisation diffuseur",
+      "prevu": 77.57
+    }
+  ],
+  "Navettes de l'art": [
+    {
+      "poste": "60 – Achats",
+      "categorie": "Carburant",
+      "prevu": 100.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "Fournitures bureau",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "Copies",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "Petit équipement",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Locations mobilières & immobilières",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Assurances",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Entretien réparations",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Sous-traitance",
+      "prevu": 2000.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Documentation",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Indemnités participant·es commissions",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Comptabilité, social, commissaire aux comptes",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Hébergement web, maintenance…",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Diffusion outils de com",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Rémunération Intermédiaires & honoraires",
+      "prevu": 250.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais de communication",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais postaux",
+      "prevu": 250.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Publicité, publications, impressions com",
+      "prevu": 320.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Salarié·es et membres CA",
+      "prevu": 2750.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Intervenant·es",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Participant·es indemnisé·s",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais de réception et de mission",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Mission hébergement intervenants",
+      "prevu": 0.0
+    },
+    {
+      "poste": "63 – Impôts & taxes",
+      "categorie": "Impôts & taxes sur rémunération",
+      "prevu": 0.0
+    },
+    {
+      "poste": "63 – Impôts & taxes",
+      "categorie": "Autres impôts & taxes",
+      "prevu": 0.0
+    },
+    {
+      "poste": "65 – Autres charges de gestion courante",
+      "categorie": "Droits d’auteur",
+      "prevu": 0.0
+    },
+    {
+      "poste": "65 – Autres charges de gestion courante",
+      "categorie": "Cotisation diffuseur",
+      "prevu": 0.0
+    }
+  ],
+  "Représentation": [
+    {
+      "poste": "60 – Achats",
+      "categorie": "Fournitures non stockables",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "carburant",
+      "prevu": 150.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "Fournitures bureau",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "copies",
+      "prevu": 0.0
+    },
+    {
+      "poste": "60 – Achats",
+      "categorie": "Petit équipement",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Locations mobilières & immobilières",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Assurances",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Entretien réparations",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Sous-traitance",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Documentation",
+      "prevu": 0.0
+    },
+    {
+      "poste": "61 – Services extérieurs",
+      "categorie": "Indemnités participant·es commissions",
+      "prevu": 120.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Comptabilité, social, commissaire aux comptes",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Hébergement web, maintenance…",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Diffusion outils de com",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Rémunération Intermédiaires & honoraires",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais de communication",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais postaux",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais téléphone",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Publicité, publications, impressions com",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Salarié·es déplacements",
+      "prevu": 400.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Membres CA déplacements",
+      "prevu": 300.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Intervenant·es",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Participant·es indemnisé·s",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Frais de réception et de mission",
+      "prevu": 350.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Mission hébergement intervenants",
+      "prevu": 0.0
+    },
+    {
+      "poste": "62 – Autres services extérieurs",
+      "categorie": "Services bancaires",
+      "prevu": 0.0
+    },
+    {
+      "poste": "64 – Charges de personnel",
+      "categorie": "Chargée de communication et documentation",
+      "prevu": 0.0
+    },
+    {
+      "poste": "64 – Charges de personnel",
+      "categorie": "Charges de personnel non cadre",
+      "prevu": 0.0
+    },
+    {
+      "poste": "64 – Charges de personnel",
+      "categorie": "Coordinatrice",
+      "prevu": 0.0
+    },
+    {
+      "poste": "64 – Charges de personnel",
+      "categorie": "Charges de personnel cadre",
+      "prevu": 0.0
+    },
+    {
+      "poste": "64 – Charges de personnel",
+      "categorie": "Autres charges de personnel",
+      "prevu": 0.0
+    },
+    {
+      "poste": "65 – Autres charges de gestion courante",
+      "categorie": "Droits d’auteur",
+      "prevu": 0.0
+    },
+    {
+      "poste": "65 – Autres charges de gestion courante",
+      "categorie": "Cotisation diffuseur",
+      "prevu": 0.0
+    }
+  ]
+}

@@ -1,0 +1,240 @@
+:root {
+  --fond: #fafaf8;
+  --fond-releve: #f1f0ea;
+  --encre: #1f2a24;
+  --encre-att: #5b6660;
+  --ligne: #dedad0;
+  --vert: #2f6f4e;
+  --vert-fond: #e7efe9;
+  --rouge: #b4483a;
+  --rouge-fond: #f7e9e6;
+  --ambre: #a5730f;
+  --ambre-fond: #f5ecd9;
+
+  --police-ui:
+    -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --police-titre: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+
+  --rayon: 6px;
+  --espace-1: 4px;
+  --espace-2: 8px;
+  --espace-3: 12px;
+  --espace-4: 16px;
+  --espace-5: 24px;
+  --espace-6: 32px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--fond);
+  color: var(--encre);
+  font-family: var(--police-ui);
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--police-titre);
+  font-weight: 600;
+  margin: 0 0 var(--espace-4) 0;
+  letter-spacing: 0.01em;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+h2 {
+  font-size: 1.15rem;
+}
+h3 {
+  font-size: 1rem;
+}
+
+.chiffre,
+input[type="number"],
+td.montant,
+.montant {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+a {
+  color: var(--vert);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--vert);
+  outline-offset: 2px;
+}
+
+button {
+  cursor: pointer;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espace-2);
+  padding: 10px 18px;
+  border-radius: var(--rayon);
+  border: 1px solid var(--ligne);
+  background: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.btn:hover {
+  border-color: var(--encre-att);
+}
+
+.btn-primaire {
+  background: var(--vert);
+  border-color: var(--vert);
+  color: #fff;
+}
+
+.btn-primaire:hover {
+  background: #285f42;
+  border-color: #285f42;
+}
+
+.btn-discret {
+  border-color: transparent;
+  background: transparent;
+}
+
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-1);
+  margin-bottom: var(--espace-4);
+}
+
+.champ label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--encre-att);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.champ input,
+.champ select,
+.champ textarea {
+  padding: 12px 14px;
+  border: 1px solid var(--ligne);
+  border-radius: var(--rayon);
+  background: #fff;
+  font-size: 1.05rem;
+  width: 100%;
+}
+
+.champ input:focus,
+.champ select:focus,
+.champ textarea:focus {
+  border-color: var(--vert);
+}
+
+.carte {
+  background: #fff;
+  border: 1px solid var(--ligne);
+  border-radius: var(--rayon);
+  padding: var(--espace-4);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: var(--espace-2) var(--espace-3);
+  border-bottom: 1px solid var(--ligne);
+}
+
+th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--encre-att);
+  font-weight: 600;
+}
+
+td.montant,
+th.montant {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.statut-normal {
+  color: var(--vert);
+}
+.statut-alerte {
+  color: var(--ambre);
+}
+.statut-depassement {
+  color: var(--rouge);
+}
+
+.pastille {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.pastille.statut-normal {
+  background: var(--vert);
+}
+.pastille.statut-alerte {
+  background: var(--ambre);
+}
+.pastille.statut-depassement {
+  background: var(--rouge);
+}
+
+.toast {
+  position: fixed;
+  bottom: var(--espace-5);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--encre);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: var(--rayon);
+  font-size: 0.9rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  z-index: 100;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
