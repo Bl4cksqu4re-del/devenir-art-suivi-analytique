@@ -4,6 +4,7 @@
   import { formatMontant, formatDate } from "../util/format";
   import { afficherToast } from "../util/toast.svelte";
   import { mouvementsVersCsv, telechargerFichier } from "../util/csv";
+  import { estConfirme } from "../db/aggregate";
   import { AXES_ORDRE } from "../db/types";
   import type { Mouvement } from "../db/types";
 
@@ -16,6 +17,7 @@
   let filtreCategorie = $state("");
   let filtreDebut = $state("");
   let filtreFin = $state("");
+  let filtreStatut = $state<"" | "confirme" | "aConfirmer">("");
 
   let axesDisponibles = $derived(AXES_ORDRE.filter((a) => lignes.value.some((l) => l.axe === a)));
   let postesDisponibles = $derived(
@@ -40,6 +42,11 @@
       .filter((m) => !filtreDebut || m.date >= filtreDebut)
       .filter((m) => !filtreFin || m.date <= filtreFin)
       .filter((m) => {
+        if (filtreStatut === "confirme") return estConfirme(m);
+        if (filtreStatut === "aConfirmer") return !estConfirme(m);
+        return true;
+      })
+      .filter((m) => {
         if (!recherche.trim()) return true;
         const q = recherche.toLowerCase();
         return (
@@ -52,15 +59,18 @@
       .sort((a, b) => b.date.localeCompare(a.date) || b.creeLe.localeCompare(a.creeLe)),
   );
 
-  let total = $derived(mouvementsFiltres.reduce((s, m) => s + m.montant, 0));
+  let total = $derived(mouvementsFiltres.filter(estConfirme).reduce((s, m) => s + m.montant, 0));
+  let nbAConfirmer = $derived(mouvementsFiltres.filter((m) => !estConfirme(m)).length);
 
   let idEnEdition = $state<string | null>(null);
+  let editionEtaitAConfirmer = $state(false);
   let editionDate = $state("");
   let editionMontant = $state("");
   let editionDescription = $state("");
 
   function commencerEdition(m: Mouvement) {
     idEnEdition = m.id;
+    editionEtaitAConfirmer = !estConfirme(m);
     editionDate = m.date;
     editionMontant = String(m.montant).replace(".", ",");
     editionDescription = m.description ?? "";
@@ -81,8 +91,9 @@
       date: editionDate,
       montant,
       description: editionDescription.trim() || undefined,
+      confirme: true,
     });
-    afficherToast("Mouvement modifié");
+    afficherToast(editionEtaitAConfirmer ? "Échéance confirmée" : "Mouvement modifié");
     idEnEdition = null;
   }
 
@@ -136,9 +147,20 @@
       <label for="j-fin">Jusqu'à</label>
       <input id="j-fin" type="date" bind:value={filtreFin} />
     </div>
+    <div class="champ">
+      <label for="j-statut">Statut</label>
+      <select id="j-statut" bind:value={filtreStatut}>
+        <option value="">Tous</option>
+        <option value="confirme">Confirmés</option>
+        <option value="aConfirmer">À confirmer</option>
+      </select>
+    </div>
   </div>
   <div class="resume">
-    <span>{mouvementsFiltres.length} mouvement(s) — total <strong class="chiffre">{formatMontant(total)}</strong></span>
+    <span>
+      {mouvementsFiltres.length} mouvement(s) — total confirmé <strong class="chiffre">{formatMontant(total)}</strong>
+      {#if nbAConfirmer > 0}<span class="statut-alerte"> · {nbAConfirmer} à confirmer</span>{/if}
+    </span>
     <button class="btn" onclick={exporterCsv}>Exporter en CSV</button>
   </div>
 </section>
@@ -167,20 +189,29 @@
             <td><input type="text" bind:value={editionDescription} /></td>
             <td class="montant"><input type="text" inputmode="decimal" bind:value={editionMontant} /></td>
             <td class="actions">
-              <button class="btn btn-primaire btn-petit" onclick={validerEdition}>OK</button>
+              <button class="btn btn-primaire btn-petit" onclick={validerEdition}>
+                {editionEtaitAConfirmer ? "Confirmer" : "OK"}
+              </button>
               <button class="btn btn-discret btn-petit" onclick={annulerEdition}>Annuler</button>
             </td>
           </tr>
         {:else}
-          <tr>
+          <tr class:ligne-a-confirmer={!estConfirme(m)}>
             <td>{formatDate(m.date)}</td>
             <td>{m.axe}</td>
             <td>{m.poste}</td>
             <td>{m.categorie}</td>
-            <td>{m.description ?? ""}</td>
+            <td>
+              {m.description ?? ""}
+              {#if !estConfirme(m)}<span class="badge-a-confirmer">à confirmer</span>{/if}
+            </td>
             <td class="montant chiffre">{formatMontant(m.montant)}</td>
             <td class="actions">
-              <button class="btn btn-discret btn-petit" onclick={() => commencerEdition(m)}>Modifier</button>
+              {#if estConfirme(m)}
+                <button class="btn btn-discret btn-petit" onclick={() => commencerEdition(m)}>Modifier</button>
+              {:else}
+                <button class="btn btn-primaire btn-petit" onclick={() => commencerEdition(m)}>Confirmer</button>
+              {/if}
               <button class="btn btn-discret btn-petit" onclick={() => supprimer(m.id)}>Supprimer</button>
             </td>
           </tr>
@@ -233,5 +264,19 @@
     border: 1px solid var(--ligne);
     border-radius: 4px;
     width: 100%;
+  }
+  .ligne-a-confirmer td {
+    background: var(--ambre-fond);
+  }
+  .badge-a-confirmer {
+    display: inline-block;
+    margin-left: var(--espace-1);
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: var(--ambre);
+    color: #fff;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
   }
 </style>

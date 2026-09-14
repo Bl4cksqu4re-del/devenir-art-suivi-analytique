@@ -23,6 +23,10 @@ export interface Mouvement {
   montant: number; // TTC
   description?: string;
   creeLe: string; // horodatage de création, pour audit
+  // false = échéance récurrente générée à l'avance, pas encore confirmée
+  // (date/montant à ajuster) — exclue du Réalisé tant qu'elle ne l'est pas.
+  // absent ou true = mouvement réel.
+  confirme?: boolean;
 }
 
 // Forme du fichier produit par scripts/extract_reference.py

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { db } from "../db/db";
   import { useLiveQuery } from "../util/live.svelte";
-  import { agregerParCategorie, agregerParAxe, agregerGlobal, serieTendance } from "../db/aggregate";
+  import { agregerParCategorie, agregerParAxe, agregerGlobal, serieTendance, estConfirme } from "../db/aggregate";
   import { formatMontant, formatPct, statutSeuil } from "../util/format";
   import KpiCard from "../components/KpiCard.svelte";
   import HistogrammeAxes from "../components/HistogrammeAxes.svelte";
@@ -18,11 +18,18 @@
   let points = $derived(serieTendance(annee, global.prevu, mouvements.value));
 
   let statutGlobal = $derived(statutSeuil(global.pct));
+  let nbAConfirmer = $derived(mouvements.value.filter((m) => !estConfirme(m)).length);
 </script>
 
 <section class="entete">
   <h1>Tableau de bord {annee}</h1>
 </section>
+
+{#if nbAConfirmer > 0}
+  <button class="alerte-confirmation" onclick={() => naviguer({ nom: "journal" })}>
+    {nbAConfirmer} dépense{nbAConfirmer > 1 ? "s" : ""} récurrente{nbAConfirmer > 1 ? "s" : ""} à confirmer → Journal
+  </button>
+{/if}
 
 <section class="kpis">
   <KpiCard label="Réalisé total" valeur={formatMontant(global.realise, false)} statut={statutGlobal} />
@@ -48,6 +55,19 @@
 <style>
   .entete {
     margin-bottom: var(--espace-2);
+  }
+  .alerte-confirmation {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--ambre-fond);
+    border: 1px solid var(--ambre);
+    color: var(--ambre);
+    border-radius: var(--rayon);
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: var(--espace-4);
   }
   .kpis {
     display: grid;

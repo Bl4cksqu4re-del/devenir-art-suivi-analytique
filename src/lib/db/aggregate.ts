@@ -29,9 +29,17 @@ export interface CategorieAgregat extends Agregat {
   categorie: string;
 }
 
+/** Un mouvement compte dans le Réalisé seulement une fois confirmé — une
+ * échéance récurrente générée à l'avance (confirme === false) n'y figure
+ * pas tant qu'elle n'a pas été validée (date/montant ajustés si besoin). */
+export function estConfirme(m: Mouvement): boolean {
+  return m.confirme !== false;
+}
+
 function sommeRealiseParClef(mouvements: Mouvement[]): Map<string, number> {
   const map = new Map<string, number>();
   for (const m of mouvements) {
+    if (!estConfirme(m)) continue;
     const clef = `${m.axe} ${m.poste} ${m.categorie}`;
     map.set(clef, (map.get(clef) ?? 0) + m.montant);
   }
@@ -147,7 +155,8 @@ export interface PointTendance {
  * mouvement si postérieur), avec en regard le Prévisionnel théorique
  * cumulé si le budget annuel était consommé de façon linéaire.
  */
-export function serieTendance(annee: number, prevuTotal: number, mouvements: Mouvement[]): PointTendance[] {
+export function serieTendance(annee: number, prevuTotal: number, tousMouvements: Mouvement[]): PointTendance[] {
+  const mouvements = tousMouvements.filter(estConfirme);
   const debut = new Date(Date.UTC(annee, 0, 1));
   const finAnnee = new Date(Date.UTC(annee, 11, 31));
   const aujourdHui = new Date();

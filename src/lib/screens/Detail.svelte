@@ -1,7 +1,7 @@
 <script lang="ts">
   import { db, uid } from "../db/db";
   import { useLiveQuery } from "../util/live.svelte";
-  import { agregerParCategorie, agregerParPoste, agregerParGroupe } from "../db/aggregate";
+  import { agregerParCategorie, agregerParPoste, agregerParGroupe, estConfirme } from "../db/aggregate";
   import { formatMontant, formatPct, formatDate, statutSeuil } from "../util/format";
   import { naviguer } from "../util/router.svelte";
   import { afficherToast } from "../util/toast.svelte";
@@ -168,11 +168,14 @@
     </thead>
     <tbody>
       {#each mouvementsFiltres as m (m.id)}
-        <tr>
+        <tr class:ligne-a-confirmer={!estConfirme(m)}>
           <td>{formatDate(m.date)}</td>
           <td>{m.poste}</td>
           <td>{m.categorie}</td>
-          <td>{m.description ?? ""}</td>
+          <td>
+            {m.description ?? ""}
+            {#if !estConfirme(m)}<span class="badge-a-confirmer">à confirmer</span>{/if}
+          </td>
           <td class="montant chiffre">{formatMontant(m.montant)}</td>
           <td><button class="btn btn-discret" onclick={() => supprimer(m.id)}>Supprimer</button></td>
         </tr>
@@ -214,5 +217,19 @@
   .filtres .champ {
     min-width: 160px;
     margin-bottom: 0;
+  }
+  .ligne-a-confirmer td {
+    background: var(--ambre-fond);
+  }
+  .badge-a-confirmer {
+    display: inline-block;
+    margin-left: var(--espace-1);
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: var(--ambre);
+    color: #fff;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
   }
 </style>

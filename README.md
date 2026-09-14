@@ -37,11 +37,17 @@ source fréquente d'erreurs de saisie. Ici :
    histogramme Réalisé/Prévisionnel par axe (clic → détail de l'axe).
 2. **Saisie rapide** — Axe → Poste → Catégorie (recherche) → Date → Montant →
    Description, avec rappel du Prévisionnel et du déjà consommé en temps
-   réel. Pensé pour aller vite sur mobile.
-3. **Détail par action** — répartition Prévisionnel/Réalisé/Écart par poste
-   puis catégorie, liste des mouvements de l'axe (filtrable/triable).
+   réel. Pensé pour aller vite sur mobile. Pour une dépense récurrente
+   (abonnement mensuel...), une case à cocher permet de générer en un coup
+   les mêmes mouvements sur d'autres mois : ils sont créés à l'état **« à
+   confirmer »** et n'entrent dans le Réalisé qu'une fois validés (date et
+   montant ajustables au passage) depuis le Journal.
+3. **Détail par action** — répartition Prévisionnel/Réalisé/Écart par poste,
+   groupe intermédiaire (ex. « Déplacement, voyages ») puis catégorie ;
+   liste des mouvements de l'axe (filtrable/triable).
 4. **Journal** — historique complet, recherche libre, filtres (axe, poste,
-   catégorie, période), édition/suppression, export CSV.
+   catégorie, période, statut confirmé/à confirmer), édition/confirmation/
+   suppression, export CSV (avec colonne Statut).
 5. **Paramètres** — import du budget prévisionnel (`reference-budget.json`),
    vue en lecture seule du BP chargé, export/import de sauvegarde complète.
 
