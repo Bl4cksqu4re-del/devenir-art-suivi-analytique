@@ -1,17 +1,19 @@
 import type { Mouvement } from "../db/types";
+import { estProduit } from "../db/aggregate";
 
-function champCsv(valeur: string | number): string {
-  const s = String(valeur);
+function champCsv(valeur: string | number | null | undefined): string {
+  const s = String(valeur ?? "");
   return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
 /** CSV point-virgule + BOM UTF-8 : ouverture correcte par défaut dans Excel FR. */
 export function mouvementsVersCsv(mouvements: Mouvement[]): string {
-  const entetes = ["Date", "Axe", "Poste", "Catégorie", "Montant", "Description", "Statut"];
+  const entetes = ["Date", "Nature", "Axe", "Poste", "Catégorie", "Montant", "Description", "Statut"];
   const lignes = mouvements.map((m) =>
     [
       m.date,
-      m.axe,
+      estProduit(m) ? "Recette" : "Dépense",
+      m.axe ?? "",
       m.poste,
       m.categorie,
       m.montant.toFixed(2).replace(".", ","),

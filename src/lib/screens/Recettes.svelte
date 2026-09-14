@@ -1,25 +1,24 @@
 <script lang="ts">
-  import { db, uid } from "../db/db";
+  import { db } from "../db/db";
   import { useLiveQuery } from "../util/live.svelte";
-  import { agregerParCategorie, agregerParPoste, agregerParGroupe, estConfirme, estCharge } from "../db/aggregate";
+  import { agregerParCategorie, agregerParPoste, agregerParGroupe, agreger, estConfirme } from "../db/aggregate";
   import { formatMontant, formatPct, formatDate, statutSeuil } from "../util/format";
   import { naviguer } from "../util/router.svelte";
   import { afficherToast } from "../util/toast.svelte";
 
-  let { axe }: { axe: string } = $props();
+  const lignes = useLiveQuery(
+    () => db.lignesBudget.where("nature").equals("produit").toArray(),
+    [],
+  );
+  const mouvementsRecettes = useLiveQuery(
+    () => db.mouvements.where("nature").equals("produit").toArray(),
+    [],
+  );
 
-  // .filter(estCharge) : une recette peut être taguée avec un "axe concerné"
-  // sans pour autant être une dépense de cet axe — on ne veut ici que les
-  // charges (la vue Recettes traite les recettes séparément).
-  const lignes = useLiveQuery(() => db.lignesBudget.where("axe").equals(axe).toArray(), []);
-  const mouvementsAxe = useLiveQuery(() => db.mouvements.where("axe").equals(axe).toArray(), []);
-
-  let lignesCharges = $derived(lignes.value.filter(estCharge));
-  let mouvementsCharges = $derived(mouvementsAxe.value.filter(estCharge));
-
-  let categories = $derived(agregerParCategorie(lignesCharges, mouvementsCharges));
+  let categories = $derived(agregerParCategorie(lignes.value, mouvementsRecettes.value));
   let postes = $derived(agregerParPoste(categories).sort((a, b) => a.poste.localeCompare(b.poste, "fr")));
   let groupes = $derived(agregerParGroupe(categories));
+  let global = $derived(agreger(categories.reduce((s, c) => s + c.prevu, 0), categories.reduce((s, c) => s + c.realise, 0)));
 
   function categoriesSansGroupe(poste: string) {
     return categories
@@ -40,27 +39,17 @@
   let filtreCategorie = $state("");
   let filtreDebut = $state("");
   let filtreFin = $state("");
-  let tri = $state<"date-desc" | "date-asc" | "montant-desc" | "montant-asc">("date-desc");
 
-  let toutesCategories = $derived([...new Set(lignesCharges.map((l) => l.categorie))].sort((a, b) => a.localeCompare(b, "fr")));
+  let toutesCategories = $derived(
+    [...new Set(lignes.value.map((l) => l.categorie))].sort((a, b) => a.localeCompare(b, "fr")),
+  );
 
   let mouvementsFiltres = $derived(
-    mouvementsCharges
+    mouvementsRecettes.value
       .filter((m) => !filtreCategorie || m.categorie === filtreCategorie)
       .filter((m) => !filtreDebut || m.date >= filtreDebut)
       .filter((m) => !filtreFin || m.date <= filtreFin)
-      .sort((a, b) => {
-        switch (tri) {
-          case "date-asc":
-            return a.date.localeCompare(b.date);
-          case "montant-desc":
-            return b.montant - a.montant;
-          case "montant-asc":
-            return a.montant - b.montant;
-          default:
-            return b.date.localeCompare(a.date);
-        }
-      }),
+      .sort((a, b) => b.date.localeCompare(a.date)),
   );
 
   async function supprimer(id: string) {
@@ -70,11 +59,19 @@
   }
 </script>
 
-<button class="btn btn-discret retour" onclick={() => naviguer({ nom: "dashboard" })}>← Tableau de bord</button>
-<h1>{axe}</h1>
+<h1>Recettes</h1>
+
+<section class="carte resume-global">
+  <span>Prévisionnel <strong class="chiffre">{formatMontant(global.prevu, false)}</strong></span>
+  <span>Réalisé <strong class="chiffre">{formatMontant(global.realise, false)}</strong></span>
+  <span>Écart <strong class="chiffre">{formatMontant(global.ecart, false)}</strong></span>
+</section>
 
 <section class="carte">
   <h2>Répartition par poste et catégorie</h2>
+  {#if postes.length === 0}
+    <p>Aucune recette dans la référence budgétaire chargée. Importez un fichier contenant un onglet "produits" depuis Paramètres, ou créez une catégorie de recette depuis la Saisie.</p>
+  {/if}
   <table>
     <thead>
       <tr>
@@ -134,8 +131,8 @@
   <h2>Mouvements</h2>
   <div class="filtres">
     <div class="champ">
-      <label for="d-cat">Catégorie</label>
-      <select id="d-cat" bind:value={filtreCategorie}>
+      <label for="r-cat">Catégorie</label>
+      <select id="r-cat" bind:value={filtreCategorie}>
         <option value="">Toutes</option>
         {#each toutesCategories as c}
           <option value={c}>{c}</option>
@@ -143,21 +140,12 @@
       </select>
     </div>
     <div class="champ">
-      <label for="d-debut">Depuis</label>
-      <input id="d-debut" type="date" bind:value={filtreDebut} />
+      <label for="r-debut">Depuis</label>
+      <input id="r-debut" type="date" bind:value={filtreDebut} />
     </div>
     <div class="champ">
-      <label for="d-fin">Jusqu'à</label>
-      <input id="d-fin" type="date" bind:value={filtreFin} />
-    </div>
-    <div class="champ">
-      <label for="d-tri">Tri</label>
-      <select id="d-tri" bind:value={tri}>
-        <option value="date-desc">Date (récent → ancien)</option>
-        <option value="date-asc">Date (ancien → récent)</option>
-        <option value="montant-desc">Montant (décroissant)</option>
-        <option value="montant-asc">Montant (croissant)</option>
-      </select>
+      <label for="r-fin">Jusqu'à</label>
+      <input id="r-fin" type="date" bind:value={filtreFin} />
     </div>
   </div>
 
@@ -167,6 +155,7 @@
         <th>Date</th>
         <th>Poste</th>
         <th>Catégorie</th>
+        <th>Axe concerné</th>
         <th>Description</th>
         <th class="montant">Montant</th>
         <th></th>
@@ -178,24 +167,31 @@
           <td>{formatDate(m.date)}</td>
           <td>{m.poste}</td>
           <td>{m.categorie}</td>
+          <td>{m.axe ?? "—"}</td>
           <td>
             {m.description ?? ""}
             {#if !estConfirme(m)}<span class="badge-a-confirmer">à confirmer</span>{/if}
           </td>
           <td class="montant chiffre">{formatMontant(m.montant)}</td>
-          <td><button class="btn btn-discret" onclick={() => supprimer(m.id)}>Supprimer</button></td>
+          <td class="actions">
+            <button class="btn btn-discret btn-petit" onclick={() => naviguer({ nom: "journal" })}>Modifier</button>
+            <button class="btn btn-discret btn-petit" onclick={() => supprimer(m.id)}>Supprimer</button>
+          </td>
         </tr>
       {:else}
-        <tr><td colspan="6">Aucun mouvement pour ces filtres.</td></tr>
+        <tr><td colspan="7">Aucun mouvement pour ces filtres.</td></tr>
       {/each}
     </tbody>
   </table>
+  <p class="aide">Pour modifier date, montant ou catégorie d'un mouvement, direction le Journal.</p>
 </section>
 
 <style>
-  .retour {
-    margin-bottom: var(--espace-3);
-    padding-left: 0;
+  .resume-global {
+    display: flex;
+    gap: var(--espace-5);
+    margin-bottom: var(--espace-4);
+    font-size: 0.92rem;
   }
   section.carte {
     margin-bottom: var(--espace-5);
@@ -237,5 +233,19 @@
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.02em;
+  }
+  .actions {
+    display: flex;
+    gap: var(--espace-1);
+    white-space: nowrap;
+  }
+  .btn-petit {
+    padding: 6px 10px;
+    font-size: 0.82rem;
+  }
+  .aide {
+    margin: var(--espace-2) 0 0 0;
+    font-size: 0.8rem;
+    color: var(--encre-att);
   }
 </style>

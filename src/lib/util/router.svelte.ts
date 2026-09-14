@@ -2,6 +2,7 @@ export type Route =
   | { nom: "dashboard" }
   | { nom: "saisie" }
   | { nom: "detail"; axe: string }
+  | { nom: "recettes" }
   | { nom: "journal" }
   | { nom: "parametres" };
 
@@ -14,6 +15,8 @@ function lireHash(): Route {
       return { nom: "saisie" };
     case "detail":
       return { nom: "detail", axe: decodeURIComponent(param ?? "") };
+    case "recettes":
+      return { nom: "recettes" };
     case "journal":
       return { nom: "journal" };
     case "parametres":

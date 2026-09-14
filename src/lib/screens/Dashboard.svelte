@@ -1,7 +1,7 @@
 <script lang="ts">
   import { db } from "../db/db";
   import { useLiveQuery } from "../util/live.svelte";
-  import { agregerParCategorie, agregerParAxe, agregerGlobal, serieTendance, estConfirme } from "../db/aggregate";
+  import { agregerParCategorie, agregerParAxe, agregerGlobal, serieTendance, estConfirme, estCharge, estProduit } from "../db/aggregate";
   import { formatMontant, formatPct, statutSeuil } from "../util/format";
   import KpiCard from "../components/KpiCard.svelte";
   import HistogrammeAxes from "../components/HistogrammeAxes.svelte";
@@ -12,10 +12,17 @@
   const mouvements = useLiveQuery(() => db.mouvements.toArray(), []);
 
   let annee = $derived(lignes.value.reduce((max, l) => Math.max(max, l.annee), new Date().getFullYear()));
-  let categories = $derived(agregerParCategorie(lignes.value, mouvements.value));
+  let lignesCharges = $derived(lignes.value.filter(estCharge));
+  let mouvementsCharges = $derived(mouvements.value.filter(estCharge));
+  let categories = $derived(agregerParCategorie(lignesCharges, mouvementsCharges));
   let axes = $derived(agregerParAxe(categories).sort((a, b) => b.prevu - a.prevu));
   let global = $derived(agregerGlobal(axes));
-  let points = $derived(serieTendance(annee, global.prevu, mouvements.value));
+  let points = $derived(serieTendance(annee, global.prevu, mouvementsCharges));
+
+  let recettesRealisees = $derived(
+    mouvements.value.filter(estProduit).filter(estConfirme).reduce((s, m) => s + m.montant, 0),
+  );
+  let solde = $derived(recettesRealisees - global.realise);
 
   let statutGlobal = $derived(statutSeuil(global.pct));
   let nbAConfirmer = $derived(mouvements.value.filter((m) => !estConfirme(m)).length);
@@ -27,18 +34,24 @@
 
 {#if nbAConfirmer > 0}
   <button class="alerte-confirmation" onclick={() => naviguer({ nom: "journal" })}>
-    {nbAConfirmer} dépense{nbAConfirmer > 1 ? "s" : ""} récurrente{nbAConfirmer > 1 ? "s" : ""} à confirmer → Journal
+    {nbAConfirmer} mouvement{nbAConfirmer > 1 ? "s" : ""} récurrent{nbAConfirmer > 1 ? "s" : ""} à confirmer → Journal
   </button>
 {/if}
 
 <section class="kpis">
-  <KpiCard label="Réalisé total" valeur={formatMontant(global.realise, false)} statut={statutGlobal} />
+  <KpiCard label="Réalisé total (dépenses)" valeur={formatMontant(global.realise, false)} statut={statutGlobal} />
   <KpiCard label="% du BP consommé" valeur={formatPct(global.pct)} statut={statutGlobal} />
   <KpiCard
     label="Écart net"
     valeur={formatMontant(global.ecart, false)}
     statut={global.ecart < 0 ? "depassement" : statutGlobal}
     sousTexte={global.ecart >= 0 ? "reste disponible" : "dépassement"}
+  />
+  <KpiCard
+    label="Solde (recettes − dépenses)"
+    valeur={formatMontant(solde, false)}
+    statut={solde >= 0 ? "normal" : "depassement"}
+    sousTexte={`Recettes réalisées : ${formatMontant(recettesRealisees, false)}`}
   />
 </section>
 

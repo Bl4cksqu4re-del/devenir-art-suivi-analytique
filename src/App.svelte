@@ -6,6 +6,7 @@
   import Dashboard from "./lib/screens/Dashboard.svelte";
   import Saisie from "./lib/screens/Saisie.svelte";
   import Detail from "./lib/screens/Detail.svelte";
+  import Recettes from "./lib/screens/Recettes.svelte";
   import Journal from "./lib/screens/Journal.svelte";
   import Parametres from "./lib/screens/Parametres.svelte";
 
@@ -18,6 +19,7 @@
   const liens = [
     { nom: "dashboard" as const, label: "Tableau de bord" },
     { nom: "saisie" as const, label: "Saisie" },
+    { nom: "recettes" as const, label: "Recettes" },
     { nom: "journal" as const, label: "Journal" },
     { nom: "parametres" as const, label: "Paramètres" },
   ];
@@ -47,6 +49,8 @@
     <Saisie />
   {:else if route.nom === "detail"}
     <Detail axe={route.axe} />
+  {:else if route.nom === "recettes"}
+    <Recettes />
   {:else if route.nom === "journal"}
     <Journal />
   {:else if route.nom === "parametres"}

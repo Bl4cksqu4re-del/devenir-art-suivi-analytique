@@ -11,6 +11,11 @@ export class DevenirArtDB extends Dexie {
       lignesBudget: "id, annee, axe, poste, categorie, [axe+poste+categorie]",
       mouvements: "id, date, axe, poste, categorie, creeLe",
     });
+    // v2 : ajout des recettes (nature charge/produit).
+    this.version(2).stores({
+      lignesBudget: "id, annee, axe, poste, categorie, nature, [axe+poste+categorie]",
+      mouvements: "id, date, axe, poste, categorie, creeLe, nature",
+    });
   }
 }
 

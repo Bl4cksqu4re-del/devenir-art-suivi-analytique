@@ -18,12 +18,12 @@ export interface AxeAgregat extends Agregat {
 }
 
 export interface PosteAgregat extends Agregat {
-  axe: string;
+  axe: string | null;
   poste: string;
 }
 
 export interface CategorieAgregat extends Agregat {
-  axe: string;
+  axe: string | null;
   poste: string;
   groupe: string | null;
   categorie: string;
@@ -36,12 +36,44 @@ export function estConfirme(m: Mouvement): boolean {
   return m.confirme !== false;
 }
 
+/** Absent de "nature" = donnée historique d'avant l'ajout des recettes = charge. */
+export function estCharge(x: { nature?: import("./types").Nature }): boolean {
+  return x.nature !== "produit";
+}
+
+export function estProduit(x: { nature?: import("./types").Nature }): boolean {
+  return x.nature === "produit";
+}
+
+export function estManuelle(l: LigneBudget): boolean {
+  return l.origine === "manuelle";
+}
+
+// Clé d'appariement mouvement <-> ligne de référence. L'axe n'en fait
+// délibérément partie que pour une charge : pour une recette, l'axe du
+// Mouvement n'est qu'un tag optionnel ("fléché sur telle action") sans
+// rapport avec l'axe de la LigneBudget (toujours null pour un produit) — le
+// faire compter romprait l'appariement. Séparateur "|" pour ne jamais être
+// ambigu avec un poste qui contient déjà des espaces (ex. "74 – Subventions").
+function clef(nature: string, axe: string | null, poste: string, categorie: string): string {
+  const axePart = nature === "produit" ? "" : (axe ?? "");
+  return `${nature}|${axePart}|${poste}|${categorie}`;
+}
+
+function clefLigne(l: LigneBudget): string {
+  return clef(l.nature ?? "charge", l.axe, l.poste, l.categorie);
+}
+
+function clefMouvement(m: Mouvement): string {
+  return clef(m.nature ?? "charge", m.axe, m.poste, m.categorie);
+}
+
 function sommeRealiseParClef(mouvements: Mouvement[]): Map<string, number> {
   const map = new Map<string, number>();
   for (const m of mouvements) {
     if (!estConfirme(m)) continue;
-    const clef = `${m.axe} ${m.poste} ${m.categorie}`;
-    map.set(clef, (map.get(clef) ?? 0) + m.montant);
+    const c = clefMouvement(m);
+    map.set(c, (map.get(c) ?? 0) + m.montant);
   }
   return map;
 }
@@ -51,19 +83,26 @@ export function agregerParCategorie(lignes: LigneBudget[], mouvements: Mouvement
   const consommees = new Set<string>();
 
   const resultats: CategorieAgregat[] = lignes.map((l) => {
-    const clef = `${l.axe} ${l.poste} ${l.categorie}`;
-    consommees.add(clef);
-    const realise = realiseParClef.get(clef) ?? 0;
+    const c = clefLigne(l);
+    consommees.add(c);
+    const realise = realiseParClef.get(c) ?? 0;
     return { axe: l.axe, poste: l.poste, groupe: l.groupe, categorie: l.categorie, ...agreger(l.prevu, realise) };
   });
 
   // Mouvements saisis sur une catégorie qui n'existe plus dans la référence
   // (ex. référence changée en cours d'année) : on les fait quand même apparaître,
   // avec un Prévisionnel à 0, plutôt que de perdre du Réalisé silencieusement.
-  for (const [clef, realise] of realiseParClef) {
-    if (consommees.has(clef)) continue;
-    const [axe, poste, categorie] = clef.split(" ");
-    resultats.push({ axe, poste, groupe: null, categorie, ...agreger(0, realise) });
+  // On repart directement du mouvement pour ses champs (jamais d'un
+  // découpage de la clé, fragile dès qu'un poste contient des espaces).
+  const unMouvementParClef = new Map<string, Mouvement>();
+  for (const m of mouvements) {
+    if (estConfirme(m)) unMouvementParClef.set(clefMouvement(m), m);
+  }
+  for (const [c, realise] of realiseParClef) {
+    if (consommees.has(c)) continue;
+    const m = unMouvementParClef.get(c);
+    if (!m) continue;
+    resultats.push({ axe: m.axe, poste: m.poste, groupe: null, categorie: m.categorie, ...agreger(0, realise) });
   }
 
   return resultats;
@@ -90,7 +129,7 @@ export function agregerParPoste(categories: CategorieAgregat[]): PosteAgregat[] 
 }
 
 export interface GroupeAgregat extends Agregat {
-  axe: string;
+  axe: string | null;
   poste: string;
   groupe: string;
 }
@@ -119,9 +158,12 @@ export function agregerParGroupe(categories: CategorieAgregat[]): GroupeAgregat[
   return [...map.values()];
 }
 
+/** Regroupement par axe — réservé aux charges (les recettes n'ont pas
+ * forcément d'axe) : toute catégorie sans axe est ignorée ici. */
 export function agregerParAxe(categories: CategorieAgregat[]): AxeAgregat[] {
   const map = new Map<string, AxeAgregat>();
   for (const c of categories) {
+    if (!c.axe) continue;
     const courant = map.get(c.axe);
     if (courant) {
       courant.prevu += c.prevu;

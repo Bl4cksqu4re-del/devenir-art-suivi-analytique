@@ -32,6 +32,15 @@ Logique (3 niveaux : poste -> groupe (optionnel) -> catégorie) :
   valeurs brutes en dessous d'une catégorie) : seul le sous-total de la
   catégorie (son Prévisionnel figé pour l'année) nous intéresse.
 
+Recettes (comptes 70 à 79) : si le classeur contient un onglet nommé
+"produits" (recherche insensible à la casse/aux espaces), ses 7 postes
+officiels sont extraits sous la clé "Recettes" du JSON de sortie. Cet
+onglet n'a pas (encore) la même rigueur de structure que les onglets de
+charges (pas de formule SUM(plage) fiable sur les sous-catégories) : seul
+le niveau poste est extrait automatiquement, le nom du poste servant de
+catégorie par défaut — les sous-catégories plus fines (ex. « Subvention
+DRAC ») sont à ajouter à la main dans l'app.
+
 Le script ne modifie jamais le classeur source (ouverture en lecture seule).
 
 Usage :
@@ -77,10 +86,28 @@ CELL_REF_RE = re.compile(r"[A-Za-z]+(\d+)")
 
 STOP_LABELS = {
     "TOTAL DES CHARGES",
+    "TOTAL DES PRODUITS",
     "PART BUDGET GLOBAL",
     "TOTAL GENERAL",
     "TOTAL GÉNÉRAL",
+    "CONTRIBUTIONS VOLONTAIRES EN NATURE",
 }
+
+POSTE_PREFIX_RE = re.compile(r"^\s*\d+\s*[–‒\-]\s*")
+
+
+def nom_sans_prefixe_poste(label: str) -> str:
+    """« 70 – Ventes » -> « Ventes » : sert de nom de catégorie par défaut
+    pour les recettes, dont le classeur ne détaille pas encore les
+    sous-catégories aussi finement que pour les charges."""
+    return POSTE_PREFIX_RE.sub("", label).strip()
+
+
+def trouver_feuille_produits(sheetnames: list[str]) -> str | None:
+    for name in sheetnames:
+        if name.strip().lower() == "produits":
+            return name
+    return None
 
 # Le poste "63 – Impôts & taxes" ne suit pas le schéma habituel : ses 2
 # catégories ("Impôts & taxes sur rémunération", "Autres impôts & taxes")
@@ -190,7 +217,32 @@ def _charger_classeur_xlsx(path: Path):
 
         return lignes
 
-    return wb_formulas.sheetnames, extraire
+    def extraire_produits(sheet_name: str) -> list[dict]:
+        # Feuille "produits" : structure différente des feuilles de charges
+        # (colonne A = libellé, colonne B = Prévisionnel — pas C). Seul le
+        # niveau poste (70 à 79) est fiable pour l'instant (formules pas
+        # encore posées sur les sous-catégories dans le classeur) ; le nom du
+        # poste sert de catégorie par défaut, à affiner à la main dans l'app.
+        ws_values = wb_values[sheet_name]
+        lignes: list[dict] = []
+        for row in range(1, ws_values.max_row + 1):
+            label = clean_label(ws_values.cell(row=row, column=1).value)
+            if not label:
+                continue
+            if label.upper() in STOP_LABELS:
+                break
+            if POSTE_RE.match(label):
+                prevu_value = ws_values.cell(row=row, column=2).value
+                prevu = round(float(prevu_value), 2) if isinstance(prevu_value, (int, float)) else 0.0
+                lignes.append({
+                    "poste": label,
+                    "groupe": None,
+                    "categorie": nom_sans_prefixe_poste(label),
+                    "prevu": prevu,
+                })
+        return lignes
+
+    return wb_formulas.sheetnames, extraire, extraire_produits
 
 
 # ---------------------------------------------------------------------------
@@ -278,7 +330,34 @@ def _charger_classeur_ods(path: Path):
 
         return lignes
 
-    return list(tables_par_nom.keys()), extraire
+    def extraire_produits(sheet_name: str) -> list[dict]:
+        table = tables_par_nom[sheet_name]
+        lignes: list[dict] = []
+        for row in table.getElementsByType(TableRow):
+            repeat = int(row.getAttribute("numberrowsrepeated") or 1)
+            if repeat > 1:
+                continue
+            cellules = cellules_de_la_ligne(row)
+            if not cellules:
+                continue
+            label = clean_label(teletype.extractText(cellules[0]))
+            if not label:
+                continue
+            if label.upper() in STOP_LABELS:
+                break
+            if POSTE_RE.match(label):
+                b_cell = cellules[1] if len(cellules) > 1 else None
+                b_value = b_cell.getAttribute("value") if b_cell is not None else None
+                prevu = round(float(b_value), 2) if b_value not in (None, "") else 0.0
+                lignes.append({
+                    "poste": label,
+                    "groupe": None,
+                    "categorie": nom_sans_prefixe_poste(label),
+                    "prevu": prevu,
+                })
+        return lignes
+
+    return list(tables_par_nom.keys()), extraire, extraire_produits
 
 
 def main() -> None:
@@ -304,10 +383,10 @@ def main() -> None:
     suffixe = classeur_path.suffix.lower()
     if suffixe == ".xlsx":
         print(f"Lecture (lecture seule, Excel) de {classeur_path} ...")
-        sheetnames, extraire = _charger_classeur_xlsx(classeur_path)
+        sheetnames, extraire, extraire_produits = _charger_classeur_xlsx(classeur_path)
     elif suffixe == ".ods":
         print(f"Lecture (lecture seule, OpenDocument) de {classeur_path} ...")
-        sheetnames, extraire = _charger_classeur_ods(classeur_path)
+        sheetnames, extraire, extraire_produits = _charger_classeur_ods(classeur_path)
     else:
         print(f"Format non pris en charge : {suffixe} (attendu : .xlsx ou .ods)", file=sys.stderr)
         sys.exit(1)
@@ -323,6 +402,18 @@ def main() -> None:
         result[axe_label] = lignes
         total_categories += len(lignes)
         print(f"  - {axe_label}: {len(lignes)} catégories, prévu total = {sum(l['prevu'] for l in lignes):.2f} EUR")
+
+    feuille_produits = trouver_feuille_produits(sheetnames)
+    if feuille_produits:
+        lignes_produits = extraire_produits(feuille_produits)
+        result["Recettes"] = lignes_produits
+        total_categories += len(lignes_produits)
+        print(
+            f"  - Recettes: {len(lignes_produits)} postes, prévu total = "
+            f"{sum(l['prevu'] for l in lignes_produits):.2f} EUR"
+        )
+    else:
+        print("  (pas d'onglet 'produits' dans ce fichier — aucune recette extraite)")
 
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)

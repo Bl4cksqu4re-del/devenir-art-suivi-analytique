@@ -6,15 +6,34 @@
   import { formatMontant } from "../util/format";
   import { telechargerFichier } from "../util/csv";
   import { afficherToast } from "../util/toast.svelte";
-  import { AXES_ORDRE } from "../db/types";
+  import { AXES_ORDRE, type Nature } from "../db/types";
+  import { estCharge, estProduit } from "../db/aggregate";
+  import SelecteurCategorie from "../components/SelecteurCategorie.svelte";
 
   const lignes = useLiveQuery(() => db.lignesBudget.toArray(), []);
 
+  let creationNature = $state<Nature>("charge");
+  let creationAxe = $state<string | null>(AXES_ORDRE[0]);
+  let creationPoste = $state("");
+  let creationCategorie = $state("");
+
   let annee = $derived(lignes.value.reduce((max, l) => Math.max(max, l.annee), 0));
-  let axesPresents = $derived(AXES_ORDRE.filter((a) => lignes.value.some((l) => l.axe === a)));
+  let lignesCharges = $derived(lignes.value.filter(estCharge));
+  let lignesRecettes = $derived(
+    lignes.value
+      .filter(estProduit)
+      .sort(
+        (a, b) =>
+          a.poste.localeCompare(b.poste, "fr") ||
+          (a.groupe ?? "").localeCompare(b.groupe ?? "", "fr") ||
+          a.categorie.localeCompare(b.categorie, "fr"),
+      ),
+  );
+  let totalRecettes = $derived(lignesRecettes.reduce((s, l) => s + l.prevu, 0));
+  let axesPresents = $derived(AXES_ORDRE.filter((a) => lignesCharges.some((l) => l.axe === a)));
 
   function lignesDeLAxe(axe: string) {
-    return lignes.value
+    return lignesCharges
       .filter((l) => l.axe === axe)
       .sort(
         (a, b) =>
@@ -98,6 +117,25 @@
 </section>
 
 <section class="carte">
+  <h2>Ajouter une catégorie</h2>
+  <p>
+    Pour une catégorie qui n'existe pas (encore) dans le classeur source —
+    utile en particulier pour détailler les recettes (ex. « Subvention
+    DRAC ») dont le classeur ne fournit pour l'instant que le niveau poste.
+    Créée avec un Prévisionnel à 0 € (à corriger dans le classeur puis
+    réextraire, ou laisser tel quel si elle n'est pas budgétée).
+  </p>
+  <SelecteurCategorie
+    lignes={lignes.value}
+    {annee}
+    bind:nature={creationNature}
+    bind:axe={creationAxe}
+    bind:poste={creationPoste}
+    bind:categorie={creationCategorie}
+  />
+</section>
+
+<section class="carte">
   <h2>Sauvegarde complète</h2>
   <p>Exportez ou restaurez l'intégralité des données locales (référence + mouvements) — utile pour changer d'ordinateur ou faire une sauvegarde manuelle.</p>
   <div class="actions-sauvegarde">
@@ -137,6 +175,30 @@
       </table>
     </details>
   {/each}
+
+  {#if lignesRecettes.length > 0}
+    <details class="axe-detail">
+      <summary>
+        <strong>Recettes</strong>
+        <span class="chiffre">{formatMontant(totalRecettes, false)}</span>
+      </summary>
+      <table>
+        <thead>
+          <tr><th>Poste</th><th>Groupe</th><th>Catégorie</th><th class="montant">Prévisionnel</th></tr>
+        </thead>
+        <tbody>
+          {#each lignesRecettes as l (l.id)}
+            <tr>
+              <td>{l.poste}</td>
+              <td class="groupe">{l.groupe ?? "—"}</td>
+              <td>{l.categorie}</td>
+              <td class="montant chiffre">{formatMontant(l.prevu, false)}</td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    </details>
+  {/if}
 </section>
 
 <style>

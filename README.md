@@ -35,21 +35,55 @@ source fréquente d'erreurs de saisie. Ici :
 1. **Tableau de bord** — KPI (Réalisé total, % du BP consommé, Écart net),
    courbe de consommation cumulée avec Prévisionnel théorique en pointillé,
    histogramme Réalisé/Prévisionnel par axe (clic → détail de l'axe).
-2. **Saisie rapide** — Axe → Poste → Catégorie (recherche) → Date → Montant →
+2. **Saisie rapide** — Type (Dépense/Recette) → Axe (dépense) ou Axe concerné
+   optionnel (recette) → Poste → Catégorie (recherche) → Date → Montant →
    Description, avec rappel du Prévisionnel et du déjà consommé en temps
-   réel. Pensé pour aller vite sur mobile. Pour une dépense récurrente
-   (abonnement mensuel...), une case à cocher permet de générer en un coup
-   les mêmes mouvements sur d'autres mois : ils sont créés à l'état **« à
-   confirmer »** et n'entrent dans le Réalisé qu'une fois validés (date et
-   montant ajustables au passage) depuis le Journal.
+   réel. Pensé pour aller vite sur mobile. Pour un mouvement récurrent
+   (abonnement mensuel, subvention versée en plusieurs fois...), une case à
+   cocher permet de générer en un coup les mêmes mouvements sur d'autres
+   mois : ils sont créés à l'état **« à confirmer »** et n'entrent dans le
+   Réalisé qu'une fois validés (date et montant ajustables au passage)
+   depuis le Journal.
 3. **Détail par action** — répartition Prévisionnel/Réalisé/Écart par poste,
    groupe intermédiaire (ex. « Déplacement, voyages ») puis catégorie ;
-   liste des mouvements de l'axe (filtrable/triable).
-4. **Journal** — historique complet, recherche libre, filtres (axe, poste,
-   catégorie, période, statut confirmé/à confirmer), édition/confirmation/
-   suppression, export CSV (avec colonne Statut).
-5. **Paramètres** — import du budget prévisionnel (`reference-budget.json`),
-   vue en lecture seule du BP chargé, export/import de sauvegarde complète.
+   liste des mouvements de l'axe (filtrable/triable). Ne montre que les
+   charges de l'axe (les recettes ont leur propre écran).
+4. **Recettes** — même principe que le Détail par action, mais pour les
+   comptes 70 à 79 (Ventes, Subventions...), tous axes confondus : une
+   recette n'est pas structurellement rattachée à un axe, elle peut
+   seulement être taguée « Axe concerné » à titre indicatif (utile pour une
+   subvention fléchée sur une action précise).
+5. **Journal** — historique complet (dépenses et recettes), recherche libre,
+   filtres (type, axe, poste, catégorie, période, statut confirmé/à
+   confirmer), édition complète d'un mouvement (y compris changer son type,
+   son axe, son poste ou sa catégorie — pas seulement date/montant),
+   confirmation des échéances, suppression, export CSV (avec colonnes
+   Nature et Statut).
+6. **Paramètres** — import du budget prévisionnel (`reference-budget.json`),
+   création de catégorie personnalisée (voir plus bas), vue en lecture seule
+   du BP chargé (dépenses par axe + recettes), export/import de sauvegarde
+   complète.
+
+### Recettes : niveau de détail actuel
+
+Le classeur source ne structure pas encore les recettes aussi finement que
+les charges — seul le niveau **poste officiel** (70 – Ventes, 74 –
+Subventions, etc.) est extrait automatiquement, avec le nom du poste comme
+catégorie par défaut. Pour détailler (ex. « Subvention DRAC », « Cotisations
+membres », « Dons »), deux options :
+
+- **Dans l'app** : Paramètres → Ajouter une catégorie (ou directement depuis
+  la recherche de catégorie en Saisie, qui propose « + Créer... » si rien ne
+  correspond). Simple et immédiat, mais cette catégorie n'existe que dans
+  l'app tant qu'elle n'est pas reportée dans le classeur.
+- **Dans le classeur** : ajoutez une ligne avec sa propre formule
+  `SUM(plage)` sous le poste concerné dans l'onglet "produits", puis relancez
+  le script d'extraction — la source de vérité reste alors le classeur.
+
+Les catégories créées depuis l'app sont marquées en interne comme
+« manuelles » et **survivent à un ré-import** de `reference-budget.json` :
+seules les catégories venant du classeur sont remplacées, les vôtres restent
+intactes.
 
 ## Démarrer en local
 
