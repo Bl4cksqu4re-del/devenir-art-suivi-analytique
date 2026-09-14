@@ -14,7 +14,14 @@
   let axesPresents = $derived(AXES_ORDRE.filter((a) => lignes.value.some((l) => l.axe === a)));
 
   function lignesDeLAxe(axe: string) {
-    return lignes.value.filter((l) => l.axe === axe).sort((a, b) => a.poste.localeCompare(b.poste, "fr") || a.categorie.localeCompare(b.categorie, "fr"));
+    return lignes.value
+      .filter((l) => l.axe === axe)
+      .sort(
+        (a, b) =>
+          a.poste.localeCompare(b.poste, "fr") ||
+          (a.groupe ?? "").localeCompare(b.groupe ?? "", "fr") ||
+          a.categorie.localeCompare(b.categorie, "fr"),
+      );
   }
   function totalAxe(axe: string) {
     return lignesDeLAxe(axe).reduce((s, l) => s + l.prevu, 0);
@@ -115,12 +122,13 @@
       </summary>
       <table>
         <thead>
-          <tr><th>Poste</th><th>Catégorie</th><th class="montant">Prévisionnel</th></tr>
+          <tr><th>Poste</th><th>Groupe</th><th>Catégorie</th><th class="montant">Prévisionnel</th></tr>
         </thead>
         <tbody>
           {#each lignesDeLAxe(axe) as l (l.id)}
             <tr>
               <td>{l.poste}</td>
+              <td class="groupe">{l.groupe ?? "—"}</td>
               <td>{l.categorie}</td>
               <td class="montant chiffre">{formatMontant(l.prevu, false)}</td>
             </tr>
@@ -143,6 +151,10 @@
   }
   input[type="file"] {
     margin-top: var(--espace-2);
+  }
+  td.groupe {
+    color: var(--encre-att);
+    font-size: 0.85em;
   }
   .actions-sauvegarde {
     display: flex;

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { db, uid } from "../db/db";
   import { useLiveQuery } from "../util/live.svelte";
-  import { agregerParCategorie, agregerParPoste, agreger } from "../db/aggregate";
+  import { agregerParCategorie, agregerParPoste, agregerParGroupe } from "../db/aggregate";
   import { formatMontant, formatPct, formatDate, statutSeuil } from "../util/format";
   import { naviguer } from "../util/router.svelte";
   import { afficherToast } from "../util/toast.svelte";
@@ -13,9 +13,22 @@
 
   let categories = $derived(agregerParCategorie(lignes.value, mouvementsAxe.value));
   let postes = $derived(agregerParPoste(categories).sort((a, b) => a.poste.localeCompare(b.poste, "fr")));
+  let groupes = $derived(agregerParGroupe(categories));
 
-  function categoriesDuPoste(poste: string) {
-    return categories.filter((c) => c.poste === poste).sort((a, b) => a.categorie.localeCompare(b.categorie, "fr"));
+  function categoriesSansGroupe(poste: string) {
+    return categories
+      .filter((c) => c.poste === poste && !c.groupe)
+      .sort((a, b) => a.categorie.localeCompare(b.categorie, "fr"));
+  }
+
+  function groupesDuPoste(poste: string) {
+    return groupes.filter((g) => g.poste === poste).sort((a, b) => a.groupe.localeCompare(b.groupe, "fr"));
+  }
+
+  function categoriesDuGroupe(poste: string, groupe: string) {
+    return categories
+      .filter((c) => c.poste === poste && c.groupe === groupe)
+      .sort((a, b) => a.categorie.localeCompare(b.categorie, "fr"));
   }
 
   let filtreCategorie = $state("");
@@ -76,10 +89,30 @@
           <td class="montant chiffre">{formatMontant(p.ecart, false)}</td>
           <td class="montant chiffre statut-{statutP}">{formatPct(p.pct)}</td>
         </tr>
-        {#each categoriesDuPoste(p.poste) as c (c.categorie)}
+        {#each groupesDuPoste(p.poste) as g (g.groupe)}
+          {@const statutG = statutSeuil(g.pct)}
+          <tr class="ligne-groupe">
+            <td class="indent-1"><em>{g.groupe}</em></td>
+            <td class="montant chiffre">{formatMontant(g.prevu, false)}</td>
+            <td class="montant chiffre">{formatMontant(g.realise, false)}</td>
+            <td class="montant chiffre">{formatMontant(g.ecart, false)}</td>
+            <td class="montant chiffre statut-{statutG}">{formatPct(g.pct)}</td>
+          </tr>
+          {#each categoriesDuGroupe(p.poste, g.groupe) as c (c.categorie)}
+            {@const statutC = statutSeuil(c.pct)}
+            <tr class="ligne-categorie">
+              <td class="indent-2">{c.categorie}</td>
+              <td class="montant chiffre">{formatMontant(c.prevu, false)}</td>
+              <td class="montant chiffre">{formatMontant(c.realise, false)}</td>
+              <td class="montant chiffre">{formatMontant(c.ecart, false)}</td>
+              <td class="montant chiffre statut-{statutC}"><span class="pastille statut-{statutC}"></span> {formatPct(c.pct)}</td>
+            </tr>
+          {/each}
+        {/each}
+        {#each categoriesSansGroupe(p.poste) as c (c.categorie)}
           {@const statutC = statutSeuil(c.pct)}
           <tr class="ligne-categorie">
-            <td class="indent">{c.categorie}</td>
+            <td class="indent-1">{c.categorie}</td>
             <td class="montant chiffre">{formatMontant(c.prevu, false)}</td>
             <td class="montant chiffre">{formatMontant(c.realise, false)}</td>
             <td class="montant chiffre">{formatMontant(c.ecart, false)}</td>
@@ -162,8 +195,15 @@
   .ligne-poste td {
     background: var(--fond-releve);
   }
-  .indent {
+  .ligne-groupe td {
+    background: color-mix(in srgb, var(--fond-releve) 55%, #fff);
+    color: var(--encre-att);
+  }
+  .indent-1 {
     padding-left: var(--espace-5);
+  }
+  .indent-2 {
+    padding-left: calc(var(--espace-5) + var(--espace-4));
   }
   .filtres {
     display: flex;

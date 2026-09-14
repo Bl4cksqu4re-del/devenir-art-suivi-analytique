@@ -31,7 +31,11 @@
     lignes.value
       .filter((l) => l.axe === axe && l.poste === poste)
       .filter((l) => l.categorie.toLowerCase().includes(recherche.toLowerCase()))
-      .sort((a, b) => a.categorie.localeCompare(b.categorie, "fr")),
+      .sort(
+        (a, b) =>
+          (a.groupe ?? "").localeCompare(b.groupe ?? "", "fr") ||
+          a.categorie.localeCompare(b.categorie, "fr"),
+      ),
   );
 
   let ligneSelectionnee = $derived(
@@ -112,10 +116,14 @@
     />
     {#if poste}
       <div class="liste-categories" role="listbox" aria-label="Catégories">
-        {#each categoriesDisponibles as c (c.categorie)}
+        {#each categoriesDisponibles as c, i (c.categorie)}
+          {#if c.groupe && c.groupe !== categoriesDisponibles[i - 1]?.groupe}
+            <p class="entete-groupe">{c.groupe}</p>
+          {/if}
           <button
             type="button"
             class="option-categorie"
+            class:sous-groupe={!!c.groupe}
             class:selectionnee={categorie === c.categorie}
             onclick={() => (categorie = c.categorie)}
           >
@@ -172,6 +180,15 @@
     margin-top: 6px;
     background: #fff;
   }
+  .entete-groupe {
+    margin: 6px 0 0 0;
+    padding: 6px 12px 2px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--encre-att);
+  }
   .option-categorie {
     text-align: left;
     padding: 10px 12px;
@@ -179,6 +196,10 @@
     background: transparent;
     border-radius: 4px;
     font-size: 0.95rem;
+  }
+  .option-categorie.sous-groupe {
+    margin-left: var(--espace-3);
+    width: calc(100% - var(--espace-3));
   }
   .option-categorie:hover {
     background: var(--fond-releve);

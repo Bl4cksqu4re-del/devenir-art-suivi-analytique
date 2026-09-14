@@ -18,6 +18,7 @@ export function parseReferenceFile(data: ReferenceBudgetFile): LigneBudget[] {
         annee,
         axe,
         poste: entry.poste,
+        groupe: entry.groupe ?? null,
         categorie: entry.categorie,
         prevu: entry.prevu,
       });

@@ -4,6 +4,11 @@ export interface LigneBudget {
   annee: number;
   axe: string;
   poste: string;
+  // Regroupement intermédiaire optionnel entre poste et catégorie (ex.
+  // "Déplacement, voyages" au-dessus de "Salarié·es déplacements"), tel que
+  // structuré dans le classeur source — null si la catégorie est un enfant
+  // direct du poste.
+  groupe: string | null;
   categorie: string;
   prevu: number;
 }
@@ -23,7 +28,7 @@ export interface Mouvement {
 // Forme du fichier produit par scripts/extract_reference.py
 export interface ReferenceBudgetFile {
   annee: number;
-  [axe: string]: number | { poste: string; categorie: string; prevu: number }[];
+  [axe: string]: number | { poste: string; groupe?: string | null; categorie: string; prevu: number }[];
 }
 
 export const AXES_ORDRE = [

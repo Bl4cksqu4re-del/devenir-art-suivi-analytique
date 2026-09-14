@@ -124,29 +124,36 @@ office de sauvegarde complète).
 
 Le Prévisionnel n'est **jamais codé en dur** dans l'application : il vient
 du fichier `public/reference-budget.json`, lui-même généré depuis le
-classeur Excel par le script `scripts/extract_reference.py`.
+classeur source par le script `scripts/extract_reference.py`. Le script
+accepte aussi bien un classeur **Excel (`.xlsx`)** qu'**OpenDocument
+(`.ods`, LibreOffice/OnlyOffice)** — pratique si tout le monde dans
+l'association n'utilise pas le même tableur.
 
-Quand un nouveau classeur budgétaire est prêt pour l'année suivante (même
-gabarit — 7 onglets d'action, mêmes colonnes A/C/D — mais nouveaux
-montants) :
+Quand un nouveau classeur budgétaire est prêt (même gabarit — 7 onglets
+d'action, mêmes colonnes A/C/D — mais nouveaux montants), ou qu'une mise à
+jour arrive dans l'autre format :
 
-1. Assurez-vous d'avoir Python 3 avec `openpyxl` :
+1. Assurez-vous d'avoir Python 3 avec les modules nécessaires :
 
    ```bash
-   py -m pip install openpyxl
+   py -m pip install openpyxl odfpy
    ```
 
-   (remplacez `py` par `python3` selon votre installation)
+   (remplacez `py` par `python3` selon votre installation ; `openpyxl` sert
+   à lire les `.xlsx`, `odfpy` les `.ods` — vous pouvez n'installer que
+   celui dont vous avez besoin)
 
-2. Lancez le script sur le nouveau classeur :
+2. Lancez le script sur le nouveau fichier :
 
    ```bash
    py scripts/extract_reference.py "chemin/vers/BP_devenir_art_2027.xlsx" --annee 2027 --out public/reference-budget.json
+   # ou, pour un fichier OpenDocument :
+   py scripts/extract_reference.py "chemin/vers/BP_devenir_art_2027.ods" --annee 2027 --out public/reference-budget.json
    ```
 
    - `--annee` peut être omis si le nom de fichier contient déjà l'année
      (ex. `BP_..._2027.xlsx`).
-   - Le script **ouvre le classeur en lecture seule et ne le modifie
+   - Le script **ouvre le fichier en lecture seule et ne le modifie
      jamais** ; il ne fait qu'écrire un nouveau `reference-budget.json`.
 
 3. Rechargez l'application, puis allez dans **Paramètres → Importer / mettre
@@ -165,14 +172,31 @@ Dans chaque onglet, la colonne A porte les libellés, la colonne C le
 Prévisionnel. Une ligne « poste comptable » commence par un nombre à deux
 chiffres suivi d'un tiret (ex. `60 – Achats`) et sert uniquement de
 séparateur. Une ligne « catégorie » (ex. `carburant`) est repérée par une
-formule `=SUM(plage)` sur une **plage contiguë** (ex. `=SUM(C11:C18)`) dans
-sa cellule Prévisionnel ou Réalisé — cette plage additionne les lignes de
-transaction individuelles juste en dessous. Les lignes de regroupement
-intermédiaire (ex. « Achats matières & fournitures », qui agrège plusieurs
-catégories) ont elles une formule qui additionne des cellules isolées
-(`=C10+C19+C36`, sans plage) : elles sont ignorées. Le script a été validé
-en comparant le total de chaque axe extrait avec le « TOTAL DES CHARGES »
-du classeur d'origine (correspondance exacte sur les 7 axes).
+formule `=SUM(plage)` sur une **plage contiguë** (ex. `=SUM(C11:C18)` en
+Excel, `of:=SUM([.C11:.C18])` en OpenDocument) dans sa cellule Prévisionnel
+ou Réalisé — cette plage additionne les lignes de transaction individuelles
+juste en dessous. Les lignes de regroupement intermédiaire (ex. « Achats
+matières & fournitures », qui agrège plusieurs catégories) ont elles une
+formule qui additionne des cellules isolées (`=C10+C19+C36`, sans plage) :
+ce ne sont pas des catégories de saisie, mais leur libellé est conservé
+comme **groupe** (rubrique intermédiaire) et associé à chacune des
+catégories qu'elles référencent dans leur formule — c'est ce qui permet à
+l'app d'afficher, par exemple, « Salarié·es déplacements », « Membres CA
+déplacements », « Intervenant·es » et « Participant·es indemnisé·s »
+regroupées visuellement sous « Déplacement, voyages » (écran de saisie et
+écran Détail), exactement comme dans le classeur. Une catégorie qui n'a
+aucun groupe au-dessus d'elle est un enfant direct du poste. Exception : le
+poste « 63 – Impôts & taxes » saisit ses 2 catégories en valeur brute sans
+aucune formule (traitées comme des feuilles sans groupe). Le script a été
+validé en comparant le total de chaque axe (et de chaque groupe) extrait
+avec le « TOTAL DES CHARGES » du classeur d'origine (correspondance exacte
+sur les 7 axes, dans les deux formats).
+
+**Si vous voulez plus ou moins de granularité** (ex. fusionner ou séparer
+des catégories filles d'un groupe), ça se fait dans le classeur source, pas
+dans l'app : ajoutez/retirez une ligne avec sa propre formule `SUM(plage)`
+sous le groupe concerné, puis relancez le script. C'est volontairement la
+seule source de vérité pour la structure du budget.
 
 ## Choix techniques
 
